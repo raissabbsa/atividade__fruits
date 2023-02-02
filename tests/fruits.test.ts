@@ -9,7 +9,7 @@ describe("POST /fruits", () => {
         }
         const resultado = await supertest(app).post("/fruits").send(fruit)
 
-        expect(resultado.status).toEqual(201)
+        expect(resultado.status).toBe(201)
     });
 
     it("given a task with duplicate title it should return 409", async() => {
@@ -19,11 +19,11 @@ describe("POST /fruits", () => {
         };
 
         const firstTry = await supertest(app).post("/fruits").send(fruit);
-        expect(firstTry.status).toEqual(201); // a primeira inserção vai funcionar
+        expect(firstTry.status).toBe(201); // a primeira inserção vai funcionar
 
         // se tentarmos criar uma task igual, deve retornar 409
         const secondTry = await supertest(app).post("/fruits").send(fruit);
-        expect(secondTry.status).toEqual(409);
+        expect(secondTry.status).toBe(409);
     });
 });
 
@@ -49,6 +49,9 @@ describe("GET /fruits", () => {
 describe("GET /fruits/:id", () => {
     it("", async() => {
         const resultado = await supertest(app).get("/fruits/1");
+
+        expect(resultado.status).toBe(200);
+
         expect(resultado.body).toEqual(
             expect.objectContaining({
                 id: 1,
@@ -56,5 +59,9 @@ describe("GET /fruits/:id", () => {
                 price: expect.any(Number)
             })
         )
+    })
+    it("given an id that doesn't exist it should return 404", async() => {
+        const resultado = await supertest(app).get("/fruits/5");
+        expect(resultado.status).toBe(404);
     })
 })
